@@ -1,5 +1,11 @@
-# Logs
+# Project Log
 
-## Part 1
-|    Date    |    Time    |    Desc
-  11/4/2025      1.5hrs      Init of repo and upload .md files
+This file documents daily progress and time spent on the **ModMuse** final project.
+
+---
+
+## Part 1 — Initial Setup
+
+| Date       | Time Spent | Description |
+|-------------|-------------|-------------|
+| 11/04/2025 | 1.5 hrs | Initialized GitHub repository and uploaded .md files. |
