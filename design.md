@@ -79,27 +79,10 @@ erDiagram
 ```
 
 ## System Design Sketch
-+------------------+
-|  Frontend (React)|
-| - Prompt input   |
-| - Mod list UI    |
-| - Compatibility  |
-+---------+--------+
-          |
-          v
-+-------------------+
-|  Backend (FastAPI / Node.js) |
-| - Process user prompts       |
-| - Call AI API (OpenAI, etc.) |
-| - Query mod DB (MongoDB/Postgres) |
-| - Return recommendations     |
-+-----------+------------------+
-            |
-            v
-+----------------+
-| Database (Postgres/MongoDB) |
-| - Games                    |
-| - Mods                     |
-| - Tags / Compatibility      |
-+-----------------------------+
-
+graph TD
+    A[Frontend (React / Vue)] -->|Submit Prompt| B[Backend API (FastAPI / Node.js)]
+    B -->|Send to AI Model| C[AI Prompt Processor]
+    B -->|Query| D[(Database: Postgres / MySQL)]
+    C -->|Return Mod IDs| D
+    D -->|Send Mod Data| B
+    B -->|Return JSON| A
