@@ -78,11 +78,35 @@ erDiagram
     }
 ```
 
-## System Design Sketch
+## System Design Overview
+
+```mermaid
 graph TD
-    A[Frontend (React / Vue)] -->|Submit Prompt| B[Backend API (FastAPI / Node.js)]
-    B -->|Send to AI Model| C[AI Prompt Processor]
-    B -->|Query| D[(Database: Postgres / MySQL)]
-    C -->|Return Mod IDs| D
-    D -->|Send Mod Data| B
-    B -->|Return JSON| A
+
+    %% --- Frontend Layer ---
+    subgraph Frontend
+        A[React / Vue App<br>• Prompt Input<br>• Mod Display UI]
+    end
+
+    %% --- Backend Layer ---
+    subgraph Backend
+        B[API Server FastAPI / Node.js<br>• Handles requests<br>• Validates input<br>• Calls AI & DB]
+        C[AI Prompt Processor<br>• Analyzes user intent<br>• Generates mod keywords]
+        D[Database<br>Postgres / MySQL<br>• Stores mods, tags, compatibility]
+    end
+
+    %% --- Data Flow ---
+    A -->|Submit Prompt| B
+    B -->|Send Prompt →| C
+    C -->|Return Mod Keywords| B
+    B -->|Query Mods| D
+    D -->|Return Mod Data| B
+    B -->|Return JSON Response| A
+
+    %% --- Optional Layers ---
+    subgraph Optional_Components [Optional Components]
+        E[(Vector DB / Semantic Search)]
+    end
+    C -.->|Embed Search| E
+    E -.->|Relevant Mods| B
+
