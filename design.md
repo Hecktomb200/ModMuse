@@ -76,3 +76,30 @@ erDiagram
         int mod_id
         float relevance_score
     }
+```
+
+## System Design Sketch
++------------------+
+|  Frontend (React)|
+| - Prompt input   |
+| - Mod list UI    |
+| - Compatibility  |
++---------+--------+
+          |
+          v
++-------------------+
+|  Backend (FastAPI / Node.js) |
+| - Process user prompts       |
+| - Call AI API (OpenAI, etc.) |
+| - Query mod DB (MongoDB/Postgres) |
+| - Return recommendations     |
++-----------+------------------+
+            |
+            v
++----------------+
+| Database (Postgres/MongoDB) |
+| - Games                    |
+| - Mods                     |
+| - Tags / Compatibility      |
++-----------------------------+
+
