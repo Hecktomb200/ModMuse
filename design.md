@@ -30,6 +30,20 @@ Ultimately, ModMuse aims to support multiple games and allow community-driven up
 
 ---
 
+## Estimated Timeline
+
+| Date            | Goal                                                                        |
+| --------------- | --------------------------------------------------------------------------- |
+| **Part 1**  | Create GitHub repository, upload `README.md`, `design.md`                   |
+| **Part 2**  | Set up backend skeleton (FastAPI or Node.js)                                |
+| **Part 3**  | Build and seed initial mod/game database                                    |
+| **Part 4**  | Integrate AI model (OpenAI API or local LLM)                                |
+| **Part 5**  | Connect backend and frontend for prompt submission                          |
+| **Part 6**  | Implement filtering and compatibility logic                                 |
+| **Part 7**  | Polish UI, add styling, prepare demo and presentation                       |
+
+---
+
 ## Entity-Relationship Diagram (ERD)
 
 ```mermaid
