@@ -48,19 +48,31 @@ Ultimately, ModMuse aims to support multiple games and allow community-driven up
 
 ```mermaid
 erDiagram
-    GAME ||--o{ MOD : contains
-    MOD ||--o{ TAG : categorized_by
+
+    %% --- Relationships ---
+    GAME ||--o{ MOD : has
+
+    MOD ||--o{ MOD_TAG : has_tag
+    TAG ||--o{ MOD_TAG : categorizes
+
+    MOD ||--o{ DEPENDENCY : depends_on
     MOD ||--o{ INCOMPATIBILITY : conflicts_with
+
     PROMPT ||--o{ RECOMMENDATION : generates
+    MOD ||--o{ RECOMMENDATION : recommended
+
+    %% --- Entities ---
 
     GAME {
-        int game_id
+        int game_id PK
         string name
         string genre
+        string engine
+        string platform
     }
 
     MOD {
-        int mod_id
+        int mod_id PK
         string name
         string description
         string source_url
@@ -69,26 +81,41 @@ erDiagram
     }
 
     TAG {
-        int tag_id
+        int tag_id PK
         string name
     }
 
+    MOD_TAG {
+        int mod_id PK
+        int tag_id PK
+    }
+
+    DEPENDENCY {
+        int mod_id PK
+        int depends_on_id PK
+        string note
+    }
+
     INCOMPATIBILITY {
-        int mod_a_id
-        int mod_b_id
+        int mod_a_id PK
+        int mod_b_id PK
+        string reason
     }
 
     PROMPT {
-        int prompt_id
+        int prompt_id PK
         string user_prompt
         datetime created_at
+        string extracted_keywords
+        string model_version
     }
 
     RECOMMENDATION {
-        int rec_id
+        int rec_id PK
         int prompt_id
         int mod_id
         float relevance_score
+        int rank_order
     }
 ```
 
