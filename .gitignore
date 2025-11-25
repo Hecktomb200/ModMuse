@@ -1,0 +1,19 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+
+# IDE files
+.vscode/
+.idea/
+
+# Byte-compiled or optimized DLLs
+*.so
+
+# macOS junk (just in case)
+.DS_Store
