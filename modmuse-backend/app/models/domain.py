@@ -39,6 +39,7 @@ class ModBase(BaseModel):
 
 class ModRead(ModBase):
     tags: List[TagRead] = []
+    embedding: list[float] | None = None
 
 
 # ---------- Prompts & Recommendations ----------

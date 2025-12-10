@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ModMuse Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f7fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        background: #4e6ee8;
+        color: white;
+        text-align: center;
+        padding: 20px 10px;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    textarea {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        resize: vertical;
+        height: 120px;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 12px 18px;
+        font-size: 16px;
+        background: #4e6ee8;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #3c56b8;
+    }
+
+    .result {
+        margin-top: 20px;
+    }
+
+    .mod-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 12px;
+        border-radius: 6px;
+        background: #fafafa;
+    }
+
+    .mod-card h3 {
+        margin: 0 0 5px 0;
+    }
+
+    .tags {
+        margin-top: 6px;
+    }
+
+    .tag {
+        display: inline-block;
+        background: #eef;
+        color: #334;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-right: 4px;
+        font-size: 13px;
+    }
+</style>
+</head>
+
+<body>
+<header>
+    <h1>ModMuse — AI Mod Recommendation Demo</h1>
+</header>
+
+<div class="container">
+    <h2>Enter a Mod Prompt</h2>
+    <p>Describe the experience you're looking for (e.g. "<i>I want a hardcore survival Skyrim experience</i>").</p>
+
+    <textarea id="prompt" placeholder="Type your prompt here..."></textarea>
+    <button onclick="submitPrompt()">Generate Recommendations</button>
+
+    <div id="results" class="result"></div>
+</div>
+
+<script>
+async function submitPrompt() {
+    const userPrompt = document.getElementById("prompt").value.trim();
+    const resultsDiv = document.getElementById("results");
+
+    if (!userPrompt) {
+        resultsDiv.innerHTML = "<p>Please enter a prompt.</p>";
+        return;
+    }
+
+    resultsDiv.innerHTML = "<p><b>Generating recommendations...</b></p>";
+
+    try {
+        // ✅ Correct endpoint: trailing slash required!
+        const response = await fetch("http://localhost:8000/api/v1/recommendations/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ user_prompt: userPrompt })
+        });
+
+        if (!response.ok) {
+            resultsDiv.innerHTML = `<p style="color:red;">Error ${response.status}: ${response.statusText}</p>`;
+            return;
+        }
+
+        const data = await response.json();
+
+        // Build UI display
+        let html = `<h2>Recommendations Generated</h2>`;
+        html += `<p><b>Extracted Keywords:</b> ${data.prompt.extracted_keywords.join(", ")}</p>`;
+
+        if (data.recommendations.length === 0) {
+            html += "<p>No matching mods were found.</p>";
+        } else {
+            data.recommendations.forEach(rec => {
+                const mod = rec.mod;
+                html += `
+                    <div class="mod-card">
+                        <h3>${mod.name}</h3>
+                        <p>${mod.description || "No description available."}</p>
+                        <p><b>Relevance score:</b> ${rec.relevance_score}</p>
+                        <p><b>Version:</b> ${mod.version}</p>
+                        <p><b>Game ID:</b> ${mod.game_id}</p>
+                        <div class="tags">
+                            ${mod.tags.map(t => `<span class="tag">${t.name}</span>`).join("")}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        resultsDiv.innerHTML = html;
+
+    } catch (err) {
+        console.error(err);
+        resultsDiv.innerHTML = "<p style='color:red;'>An error occurred.</p>";
+    }
+}
+</script>
+
+</body>
+</html>

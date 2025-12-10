@@ -1,0 +1,1 @@
+from .domain import Game, Mod, Tag, ModTag, Dependency, Incompatibility, Prompt, Recommendation
