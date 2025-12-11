@@ -150,4 +150,43 @@ graph TD
     end
     C -.->|Embed Search| E
     E -.->|Relevant Mods| B
+```
 
+## Slides
+https://docs.google.com/presentation/d/1JrcAZBN7xFJBF8rkntW1gxgdiFdbBMdovn92lKjQpHc/edit?usp=sharing
+
+## Things I've learned while working on this
+1. How to design and implement a complete AI-assisted recommendation pipeline.
+2. How to integrate pgvector with SQLAlchemy and handle embeddings correctly.
+3. How to structure domain models, async queries, and data loading for efficient retrieval.
+
+## Why This Project Interests Me
+I’ve always enjoyed exploring modded game experiences, but the process of finding compatible mods is slow and frustrating. Building ModMuse let me merge two passions—gaming and AI—to create a system that genuinely solves a real-world pain point for players. It also gave me hands-on experience with real semantic retrieval systems.
+
+## Key Learnings
+1. Hybrid AI systems outperform single-method systems — embeddings + tags worked best.
+2. Type handling matters — pgvector, asyncpg, and SQLAlchemy all expect different formats.
+3. Good relational modeling makes everything easier — clean Mod/Tag/Prompt relationships simplified ranking and filtering.
+4. Scalability improves with async + proper query optimization.
+5. AI tools massively speed up development—but require careful validation.
+
+## Failover, Scaling, and Performance Characteristics
+**Failover**:
+- If embedding search fails or returns nothing, ModMuse automatically falls back to keyword/tag-based filtering.
+
+**Scaling**
+- Backend is stateless → easily horizontally scaled.
+- Vector searches remain fast due to pgvector indexing.
+- Async IO allows high concurrency.
+
+**Performance**
+- Vector <=> similarity is efficient even at scale.
+- Relationship loading optimized with selectinload.
+- LLM calls happen only once per prompt.
+
+**Authentication**
+- Local development uses no auth, but JWT or OAuth can be added without structural changes.
+
+**Concurrency**
+- Async SQLAlchemy sessions allow many simultaneous client requests.
+- Long-running AI calls do not block the event loop.
